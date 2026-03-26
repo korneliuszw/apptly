@@ -1,4 +1,4 @@
-import { db } from "@apptly/db";
+import { authSchema, db } from "@apptly/db/src/index";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { openAPI } from "better-auth/plugins";
@@ -8,6 +8,7 @@ export const auth = betterAuth({
 	},
 	database: drizzleAdapter(db, {
 		provider: "pg",
+		schema: authSchema,
 	}),
 	plugins: [openAPI()],
 });

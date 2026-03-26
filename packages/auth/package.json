@@ -4,6 +4,7 @@
 	"private": true,
 	"type": "module",
 	"module": "src/index.ts",
+	"types": "src/index.ts",
 	"scripts": {
 		"generate": "auth generate",
 		"migrate": "auth migrate",
