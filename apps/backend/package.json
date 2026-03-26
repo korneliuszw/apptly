@@ -10,6 +10,8 @@
 	},
 	"dependencies": {
 		"@apptly/auth": "workspace:*",
-		"@apptly/db": "workspace:*"
+		"@apptly/db": "workspace:*",
+		"@bogeychan/elysia-logger": "^0.1.10",
+		"drizzle-typebox": "^0.3.3"
 	}
 }

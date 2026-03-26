@@ -13,6 +13,8 @@
 		"allowJs": true,
 		"types": [
 			"bun-types" // add Bun global
-		]
+		],
+		"declaration": true,
+		"declarationMap": true
 	}
 }
