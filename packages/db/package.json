@@ -1,0 +1,10 @@
+{
+	"name": "@apptly/db",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"module": "src/index.ts",
+	"dependencies": {
+		"tslib": "^2.3.0"
+	}
+}

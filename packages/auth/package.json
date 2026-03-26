@@ -1,0 +1,19 @@
+{
+	"name": "@apptly/auth",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"module": "src/index.ts",
+	"scripts": {
+		"generate": "auth generate",
+		"migrate": "auth migrate",
+		"init-auth": "npm run generate && npm run migrate"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0",
+		"@apptly/db": "workspace:*"
+	},
+	"devDependencies": {
+		"auth": "^1.5.6"
+	}
+}
