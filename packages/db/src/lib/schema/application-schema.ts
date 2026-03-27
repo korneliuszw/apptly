@@ -41,21 +41,30 @@ export const applicationStepsDictionaryTable = t.pgTable(
 	},
 );
 
-export const applicationStepsTable = t.pgTable("application_steps", {
-	id: t.uuid().primaryKey().defaultRandom(),
-	applicationId: t
-		.uuid("application_id")
-		.references(() => applicationTable.id, { onDelete: "cascade" })
-		.notNull(),
-	dictionaryId: t
-		.uuid("dictionary_id")
-		.references(() => applicationStepsDictionaryTable.id, {
-			onDelete: "set null",
+export const applicationStepsTable = t.pgTable(
+	"application_steps",
+	{
+		id: t.uuid().defaultRandom(),
+		applicationId: t
+			.uuid("application_id")
+			.references(() => applicationTable.id, { onDelete: "cascade" })
+			.notNull(),
+		dictionaryId: t
+			.uuid("dictionary_id")
+			.references(() => applicationStepsDictionaryTable.id, {
+				onDelete: "set null",
+			}),
+		interactionAnswers: t.jsonb("interaction_answers").notNull(),
+		createdAt: t.timestamp("created_at").notNull().defaultNow(),
+		updatedAt: t.timestamp("updated_at").notNull().defaultNow(),
+	},
+	(table) => [
+		t.primaryKey({
+			name: "application_steps_pkey",
+			columns: [table.id, table.applicationId],
 		}),
-	interactionAnswers: t.jsonb("interaction_answers").notNull(),
-	createdAt: t.timestamp("created_at").notNull().defaultNow(),
-	updatedAt: t.timestamp("updated_at").notNull().defaultNow(),
-});
+	],
+);
 
 export const artificatTypeEnum = t.pgEnum("artifact_type", ["apk", "code"]);
 

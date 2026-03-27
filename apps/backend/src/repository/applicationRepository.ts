@@ -54,3 +54,27 @@ export const doesApplicationExist = (applicationId: string, userId: string) => {
 		)
 		.then((result) => result.length > 0);
 };
+
+export const upsertStepAnswer = (
+	answer: object,
+	applicationId: string,
+	dictionaryId: string,
+	id?: string,
+) => {
+	return db
+		.insert(applicationStepsTable)
+		.values({
+			applicationId,
+			dictionaryId,
+			interactionAnswers: answer,
+			id,
+		})
+		.onConflictDoUpdate({
+			target: [applicationStepsTable.applicationId, applicationStepsTable.id],
+			set: {
+				interactionAnswers: answer,
+				updatedAt: new Date(),
+			},
+		})
+		.execute();
+};

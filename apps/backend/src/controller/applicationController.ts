@@ -3,7 +3,9 @@ import {
 	doesApplicationExist,
 	getApplicationStepsDefinitionsWithAnswers,
 	getApplications,
+	upsertStepAnswer,
 } from "../repository/applicationRepository";
+import { stepAnswerSchema } from "../schema/applicationSchema";
 
 export const applicationController = new Elysia({
 	name: "application",
@@ -31,5 +33,16 @@ export const applicationController = new Elysia({
 				.get("/:appId/steps", async ({ params: { appId } }) => {
 					return await getApplicationStepsDefinitionsWithAnswers(appId);
 				})
-				.post("/:appId/step", async ({ params: { appId }, body }) => {}),
+				.put(
+					"/:appId/answer",
+					async ({ params: { appId }, body }) => {
+						await upsertStepAnswer(
+							body.interactionAnswers,
+							appId,
+							body.dictionaryId,
+							body.id,
+						);
+					},
+					stepAnswerSchema,
+				),
 	);
