@@ -9,9 +9,12 @@
 		"start": "bun run src/main.ts"
 	},
 	"dependencies": {
+		"@ai-sdk/openai-compatible": "^2.0.37",
 		"@apptly/auth": "workspace:*",
 		"@apptly/db": "workspace:*",
+		"@apptly/gateway-socket": "workspace:*",
 		"@bogeychan/elysia-logger": "^0.1.10",
+		"ai": "^6.0.141",
 		"drizzle-typebox": "^0.3.3"
 	}
 }

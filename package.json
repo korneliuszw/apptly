@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "dotenvx run -- turbo dev",
-		"dev:backend": "bun --filter @apptly/backend dev --env-file .env",
-		"dev:frontend": "bun --filter @apptly/web dev",
+		"dev:backend": "dotenvx run -- bun --elide-lines 0 --filter @apptly/backend dev",
+		"dev:frontend": "dotenvx run -- bun --filter @apptly/web dev",
 		"seed": "dotenvx run -- bun --filter @apptly/seed seed",
 		"db-setup": "dotenvx run -- bun --filter @apptly/db db:push"
 	},

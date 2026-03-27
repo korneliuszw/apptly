@@ -78,3 +78,36 @@ export const applicationArtifactsTable = t.pgTable("application_artifacts", {
 	url: t.text("url").notNull(),
 	deletedAt: t.timestamp("deleted_at"),
 });
+
+export const applicationPlanTable = t.pgTable("application_plan", {
+	id: t.uuid().primaryKey().default(sql`uuidv7()`),
+	applicationId: t
+		.uuid("application_id")
+		.references(() => applicationTable.id, { onDelete: "cascade" })
+		.notNull(),
+	plan: t.text("plan").notNull(),
+	createdAt: t.timestamp("created_at").notNull().defaultNow(),
+	updatedAt: t.timestamp("updated_at").notNull().defaultNow(),
+	deletedAt: t.timestamp("deleted_at"),
+});
+
+export const applicationGenerationStatusEnum = t.pgEnum("generation_status", [
+	"pending",
+	"in_progress",
+	"completed",
+	"failed",
+]);
+
+export const applicationGenerationTable = t.pgTable("application_generation", {
+	id: t.uuid().primaryKey().default(sql`uuidv7()`),
+	applicationPlanId: t
+		.uuid("application_plan_id")
+		.references(() => applicationPlanTable.id, { onDelete: "cascade" })
+		.notNull(),
+	status: applicationGenerationStatusEnum("status").notNull(),
+	containerId: t.varchar("container_id", {length: 64}),
+	createdAt: t.timestamp("created_at").notNull().defaultNow(),
+	updatedAt: t.timestamp("updated_at").notNull().defaultNow(),
+	finishedAt: t.timestamp("finished_at"),
+	deletedAt: t.timestamp("deleted_at"),
+});

@@ -1,0 +1,11 @@
+{
+	"name": "@apptly/gateway-socket",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"module": "src/index.ts",
+	"dependencies": {
+		"@apptly/codegen": "workspace:*",
+		"@elysiajs/eden": "^1.4.8"
+	}
+}

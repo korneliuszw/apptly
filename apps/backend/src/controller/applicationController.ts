@@ -6,19 +6,21 @@ import {
 	upsertStepAnswer,
 } from "../repository/applicationRepository";
 import { stepAnswerSchema } from "../schema/applicationSchema";
+import { planController } from "./planController";
 
 export const applicationController = new Elysia({
 	name: "application",
 	prefix: "/application",
 })
 	.get("/", async () => {
-		const userId = "MS5spSe3vKagG2U6LYVl5EyuRMOpWVWD";
+		const userId = process.env.USER_ID!
+		console.log("Fetching applications for user:", userId);
 		return await getApplications(userId);
 	})
 	.guard(
 		{
 			beforeHandle: async ({ params: { appId }, status }) => {
-				const userId = "MS5spSe3vKagG2U6LYVl5EyuRMOpWVWD";
+				const userId = process.env.USER_ID!
 				const doesExist = await doesApplicationExist(appId, userId);
 				if (!doesExist) {
 					return status(404);
@@ -30,6 +32,7 @@ export const applicationController = new Elysia({
 		},
 		(app) =>
 			app
+				.use(planController)
 				.get("/:appId/steps", async ({ params: { appId } }) => {
 					return await getApplicationStepsDefinitionsWithAnswers(appId);
 				})

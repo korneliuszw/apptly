@@ -16,9 +16,11 @@ export class DockerManager {
     }
 	async createContainer(image: string, port: number): Promise<ContainerId> {
 		const portStr = this._getPortName(port);
+        const name = `apptly-gen-${crypto.randomUUID()}`;
 		const env = mapConstantsToEnv();
 		const container = await this._docker.createContainer({
 			Image: image,
+            name,
 			Tty: false,
 			AttachStdin: false,
 			AttachStderr: false,
@@ -28,14 +30,19 @@ export class DockerManager {
 			},
 			Env: env,
 		});
+        await container.start()
 		return container.id;
 	}
     
-    async getPort(containerId: ContainerId, exposedPort: number): Promise<string | null> {
+    async getConnectionUrl(containerId: ContainerId, exposedPort: number): Promise<string | null> {
         const container = this._docker.getContainer(containerId);
         const portStr = this._getPortName(exposedPort);
         const data = await container.inspect()
-        return data.NetworkSettings.Ports[portStr]?.[0]?.HostPort ?? null
+        console.debug(`Container ${containerId} network settings:`, data.NetworkSettings);
+        if (data.NetworkSettings.Ports[portStr] === undefined) {
+            return null;
+        }
+        return `${data.NetworkSettings.Networks["bridge"].IPAddress}:${exposedPort}`
     }
 
     async stopContainer(containerId: ContainerId): Promise<void> {

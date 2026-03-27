@@ -78,3 +78,25 @@ export const upsertStepAnswer = (
 		})
 		.execute();
 };
+
+export const getApplicationSteps = (projectId: string) => {
+	return db
+		.select()
+		.from(applicationStepsTable)
+		.where(eq(applicationStepsTable.applicationId, projectId))
+		.innerJoin(
+			applicationStepsDictionaryTable,
+			eq(
+				applicationStepsDictionaryTable.id,
+				applicationStepsTable.dictionaryId,
+			),
+		);
+};
+
+export const createApplication = (name: string, description: string, ownerId: string) => {
+	return db.insert(applicationTable).values({
+		name,
+		description,
+		ownerId,
+	}).returning({ id: applicationTable.id });
+}
