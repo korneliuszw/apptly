@@ -12,7 +12,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"allowJs": true,
 		"types": [
-			"bun-types" // add Bun global
+			"bun" // add Bun global
 		],
 		"declaration": true,
 		"declarationMap": true

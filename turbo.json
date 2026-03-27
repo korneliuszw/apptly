@@ -1,8 +1,13 @@
 {
 	"$schema": "https://turborepo.dev/schema.json",
+	"globalDependencies": [".env"],
+	"globalEnv": ["DATABASE_URL", "BETTER_AUTH_URL", "BETTER_AUTH_SECRET"],
 	"tasks": {
 		"build": {
-			"env": ["DATABASE_URL", "BETTER_AUTH_URL", "BETTER_AUTH_SECRET"],
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env"
+			],
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**"]
 		},
@@ -10,7 +15,10 @@
 			"dependsOn": ["^check-types"]
 		},
 		"dev": {
-			"env": ["DATABASE_URL", "BETTER_AUTH_URL", "BETTER_AUTH_SECRET"],
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env"
+			],
 			"persistent": true,
 			"cache": false
 		}
