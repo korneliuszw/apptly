@@ -1,0 +1,16 @@
+{
+	"name": "@apptly/docker",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"module": "src/index.ts",
+	"dependencies": {
+		"dockerode": "^4.0.10"
+	},
+	"scripts": {
+		"seed": "bun run src/index.ts"
+	},
+	"devDependencies": {
+		"@types/dockerode": "^4.0.1"
+	}
+}
