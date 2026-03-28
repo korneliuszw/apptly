@@ -2,8 +2,10 @@ import { Elysia, t, file } from "elysia";
 import { serviceFactory } from "./serviceFactory";
 import { knownCommands, MessageResponseSchema } from "./types";
 import { createAppArtifact, initApp } from "./appService";
+import { logger } from "@bogeychan/elysia-logger";
 
 const app = new Elysia()
+	.use(logger())
 	.state("agents", new Map<string, AbortController>()) // Store active connections
 	.ws("/ws", {
 		body: t.Object({
@@ -51,16 +53,16 @@ const app = new Elysia()
 			console.log("WebSocket connection closed");
 		},
 	})
-	.post("/init", async ({status}) => {
-		const initResult = await initApp()
+	.post("/init", async ({ status }) => {
+		const initResult = await initApp();
 		if (initResult === "APP_ALREADY_INITIALIZED") {
-			return status(400, {"error": "App is already initialized."})
+			return status(400, { error: "App is already initialized." });
 		}
-		return {"message": "App initialized successfully."}
+		return { message: "App initialized successfully." };
 	})
 	.get("/artifact", async () => {
 		const artifactPath = await createAppArtifact();
-		return file(artifactPath)
+		return file(artifactPath);
 	})
 	.listen(3002);
 

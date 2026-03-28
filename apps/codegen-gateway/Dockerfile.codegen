@@ -2,9 +2,13 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
-RUN apt update && apt install -y git
+RUN apt update && apt install -y git curl
 RUN mkdir -p /workspace && chown -R bun:bun /workspace
+USER bun
+RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN echo "export PATH=\"\$HOME/.claude/bin:\$PATH\"" >> ~/.bashrc
 
+USER root
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 FROM base AS install

@@ -15,7 +15,7 @@ const createGitArchive = async (inputPath: string, outputPath: string) => {
 }
 
 export const createAppArtifact = async () => {
-    await simpleGit().add("*").commit(`${new Date().toISOString()}: Create artifact`)
+    await simpleGit(APP_WORKDIR).add("*").commit(`${new Date().toISOString()}: Create artifact`)
     await createGitArchive(APP_WORKDIR, `${APP_WORKDIR}/artifact.tar.gz`);
     return `${APP_WORKDIR}/artifact.tar.gz`;
 }

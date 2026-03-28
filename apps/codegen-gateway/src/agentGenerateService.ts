@@ -11,29 +11,40 @@ export const agentGenerateService = async function* (
 ): Service {
 	// For demonstration, we simply yield a message. In a real implementation, this would trigger the agent generation process.
 	yield `Agent generation initiated with content: ${content}`;
+	console.log("Starting agent generation with content:", content);
 	const abortController = new AbortController();
 	const runningAgent = agent.query({
 		prompt: content,
 		options: {
 			cwd: APP_WORKDIR,
+			debug: true,
+			model: "zai-org/glm-5.1",
 			allowedTools: ["Read", "Write"],
 			disallowedTools: ["Execute"],
-			permissionMode: "dontAsk",
+			permissionMode: "bypassPermissions",
 			includePartialMessages: false,
 			maxBudgetUsd: MAX_BUDGET_USD,
 			settingSources: ["project"],
-			systemPrompt: { type: "preset", preset: "claude_code" },
-			sandbox: {
-				enabled: true,
-			},
+			// systemPrompt: { type: "preset", preset: "claude_code" },
+			// sandbox: {
+			// 	enabled: true,
+			// },
 			tools: { type: "preset", preset: "claude_code" },
-			abortController,
+			// abortController,
+			env: {
+				ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY!,
+				ANTHROPIC_BASE_URL: process.env.ANTHROPIC_BASE_URL!,
+			},
+			executable: "bun",
+			pathToClaudeCodeExecutable: "/home/bun/.local/bin/claude",
 		},
 	});
 	const id = crypto.randomUUID();
-	state.agents.set(id, abortController);
+	// state.agents.set(id, abortController);
+	console.log(`Started agent with ID ${id}`);
 	try {
 		for await (const response of runningAgent) {
+			console.log("Received response from agent:", response);
 			if (response.type !== "system" && response.type !== "result") {
 				continue;
 			}
@@ -77,7 +88,8 @@ export const agentGenerateService = async function* (
 				}
 			}
 		}
+		console.log("Completed agent execution");
 	} finally {
-		state.agents.delete(id);
+		// state.agents.delete(id);
 	}
 };

@@ -41,11 +41,11 @@ export const generationTask = async (planId: string, host: string) => {
 	const plan = await getPlanById(planId);
 	const res = await api.init.post();
 	console.log(`Sent init request to generation container for plan ${planId}`, res);
-	const socket = getSocketConnector(`ws://${host}`);
+	const socket = getSocketConnector(`http://${host}`, planId);
 	socket.subscribe((message) =>
 		console.log("Received message from generation container:", message),
 	);
-	socket.on("close", () => console.log("WebSocket connection closed"));
+	socket.on("close", (e) => console.log("WebSocket connection closed", e));
 	socket.on("open", () => {
 		console.log("WebSocket connection opened");
 		socket.send({
