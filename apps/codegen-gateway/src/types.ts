@@ -1,4 +1,5 @@
 import {t} from "elysia"
+import type { Agent } from "./agent";
 
 export const knownCommands = ["echo", "generate", "abort", "report"] as const;
 
@@ -14,7 +15,7 @@ export const MessageResponseSchema = t.Object({
 export type ServiceResponse = typeof MessageResponseSchema['static']
 
 export type State = {
-    agents: Map<string, AbortController>;
+    agent: Agent
 }
 
 export type Service = (content: string, state: State) =>  AsyncGenerator<ServiceResponse, void, unknown>
