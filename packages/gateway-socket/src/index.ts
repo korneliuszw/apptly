@@ -1,5 +1,5 @@
 import { treaty } from "@elysiajs/eden";
-import { App } from "@apptly/codegen/src";
+import type { App } from "@apptly/codegen/src";
 
 export const getSocketConnector = (url: string, connectionId: string) => {
 	const api = treaty<App>(url);

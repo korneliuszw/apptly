@@ -48,7 +48,7 @@ export class DockerManager {
     async stopContainer(containerId: ContainerId): Promise<void> {
         const container = this._docker.getContainer(containerId);
         try {
-            await container.stop();
+            await container.stop({t: 5});
         } finally {
             await container.remove();
         }

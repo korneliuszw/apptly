@@ -3,10 +3,11 @@ import { serviceFactory } from "./serviceFactory";
 import { knownCommands, MessageResponseSchema } from "./types";
 import { createAppArtifact, initApp } from "./appService";
 import { logger } from "@bogeychan/elysia-logger";
+import { Agent } from "./agent";
 
 const app = new Elysia()
 	.use(logger())
-	.state("agents", new Map<string, AbortController>()) // Store active connections
+	.decorate("agent", await Agent.create())
 	.ws("/ws", {
 		body: t.Object({
 			message: t.Object({
@@ -32,8 +33,7 @@ const app = new Elysia()
 		},
 		async message(ws, { message: { command, content } }) {
 			const controller = serviceFactory(command);
-			const generator = controller(content, ws.data.store);
-			if (!generator) {
+			if (!controller) {
 				ws.send({
 					id: ws.data.query.id,
 					response: `Unknown command: ${command}`,
@@ -41,6 +41,7 @@ const app = new Elysia()
 				});
 				return;
 			}
+			const generator = controller(content, { agent: ws.data.agent });
 			for await (const response of generator) {
 				ws.send({
 					id: ws.data.query.id,
