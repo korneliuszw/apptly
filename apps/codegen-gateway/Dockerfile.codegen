@@ -1,5 +1,10 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
+
+FROM ghcr.io/cirruslabs/flutter:3.41.6 AS flutter
+RUN dart --disable-analytics
+
+
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 RUN apt update && apt install -y git curl
@@ -31,6 +36,8 @@ RUN bun run build
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/dist/index.js .
+COPY --from=flutter /sdks/flutter /usr/lib/flutter
+ENV PATH="/usr/lib/flutter/bin:$PATH"
 
 # run the app
 USER bun

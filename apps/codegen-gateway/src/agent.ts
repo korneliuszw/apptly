@@ -63,6 +63,14 @@ export class Agent {
                         }
 					},
 				},
+				mcp: {
+					"dart-mcp-server": {
+						"type": "local",
+						"command": ["dart", "mcp-server"],
+						"enabled": true,
+						"environment": {}
+					}
+				},
 				permission: {
 					bash: "deny",
 					external_directory: "deny",
