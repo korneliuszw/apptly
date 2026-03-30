@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import * as ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { Providers } from "./providers";
+import { RouterProvider } from "react-router";
+import { router } from "./router";
+import { Toaster } from "./components/ui/sonner";
 
 // import App from './app/app';
 
@@ -11,10 +12,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<StrictMode>
-		<BrowserRouter>
-			<Providers>
-				<div className="p-2"> test</div>
-			</Providers>
-		</BrowserRouter>
+		<RouterProvider router={router} />
+		<Toaster/>
 	</StrictMode>,
 );

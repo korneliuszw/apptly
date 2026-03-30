@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(() => ({
 	root: import.meta.dirname,
@@ -13,7 +14,12 @@ export default defineConfig(() => ({
 		port: 4201,
 		host: "localhost",
 	},
-	plugins: [react(), tailwindcss()],
+	resolve: {
+		alias: {
+			"@": `${import.meta.dirname}/src`,
+		}
+	},
+	plugins: [react(), tailwindcss(), tsconfigPaths()],
 	// Uncomment this if you are using workers.
 	// worker: {
 	//  plugins: [],

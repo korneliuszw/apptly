@@ -4,7 +4,6 @@ import {
 	applicationTable,
 	db,
 } from "@apptly/db/src";
-import { maxLength } from "better-auth";
 
 const createUser = (name: string, email: string, password: string) => {
 	return auth.api
