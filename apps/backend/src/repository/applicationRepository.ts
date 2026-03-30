@@ -8,10 +8,11 @@ import { and, eq, isNull } from "drizzle-orm";
 
 export const getApplications = (userId: string) => {
 	return db
-		.select({ id: applicationTable.id })
+		.select({ id: applicationTable.id, name: applicationTable.name, description: applicationTable.description })
 		.from(applicationTable)
 		.where(eq(applicationTable.ownerId, userId));
 };
+
 
 export const getApplicationStepsDefinitionsWithAnswers = (
 	applicationId: string,

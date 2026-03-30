@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import * as t from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -70,10 +70,7 @@ export const artificatTypeEnum = t.pgEnum("artifact_type", ["apk", "code"]);
 
 export const applicationArtifactsTable = t.pgTable("application_artifacts", {
 	id: t.uuid().primaryKey().default(sql`uuidv7()`),
-	applicationId: t
-		.uuid("application_id")
-		.references(() => applicationTable.id, { onDelete: "cascade" })
-		.notNull(),
+	generationId: t.uuid("generation_id").references(() => applicationGenerationTable.id, { onDelete: "cascade" }),
 	type: artificatTypeEnum().notNull(),
 	url: t.text("url").notNull(),
 	deletedAt: t.timestamp("deleted_at"),
@@ -106,6 +103,8 @@ export const applicationGenerationTable = t.pgTable("application_generation", {
 		.notNull(),
 	status: applicationGenerationStatusEnum("status").notNull(),
 	containerId: t.varchar("container_id", {length: 64}),
+	containerAlive: t.boolean("container_alive").notNull().default(true),
+	content: t.text("description"),
 	createdAt: t.timestamp("created_at").notNull().defaultNow(),
 	updatedAt: t.timestamp("updated_at").notNull().defaultNow(),
 	finishedAt: t.timestamp("finished_at"),
