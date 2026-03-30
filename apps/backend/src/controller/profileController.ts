@@ -6,6 +6,4 @@ export const profileController = new Elysia({
 	prefix: "/profile",
 })
 	.use(requireUser)
-	.get("/", ({ user }) => user, {
-		auth: true,
-	});
+	.get("/", ({ user }) => user);

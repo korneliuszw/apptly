@@ -2,16 +2,15 @@ import { Elysia, t } from "elysia";
 import { confirmPlan, generatePlan } from "../service/planService";
 import { DockerManager } from "../../../../packages/containers/src";
 import { startGeneration } from "../service/generationService";
+import { requireEntityOwnershipFactory } from "../middleware/requireEntityOnwership";
+import { doesApplicationExist } from "../repository/applicationRepository";
+const requireProjectOwnership = requireEntityOwnershipFactory("appId", doesApplicationExist);
 
 export const planController = new Elysia({
 	name: "plan",
 	prefix: "/plan",
 })
-	.guard({
-		params: t.Object({
-			appId: t.String({ format: "uuid" }),
-		}),
-	})
+	.use(requireProjectOwnership)
 	.get(
 		"/:appId/plan",
 		async ({ params: { appId }, query: { stream } }) => {

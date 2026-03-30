@@ -14,6 +14,7 @@
 		"@apptly/db": "workspace:*",
 		"@apptly/gateway-socket": "workspace:*",
 		"@bogeychan/elysia-logger": "^0.1.10",
+		"@elysiajs/cors": "^1.4.1",
 		"ai": "^6.0.141",
 		"drizzle-typebox": "^0.3.3"
 	}

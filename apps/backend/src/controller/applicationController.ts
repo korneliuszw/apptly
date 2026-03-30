@@ -8,34 +8,25 @@ import {
 import { stepAnswerSchema } from "../schema/applicationSchema";
 import { planController } from "./planController";
 import { getApplicationPlansWithGenerations } from "../repository/generationRepository";
+import { requireUser } from "../middleware/requireUser";
+import { requireEntityOwnershipFactory } from "../middleware/requireEntityOnwership";
+
+const requireProjectOwnership = requireEntityOwnershipFactory("appId", doesApplicationExist);
 
 export const applicationController = new Elysia({
 	name: "application",
 	prefix: "/application",
 })
-	.get("/", async () => {
-		const userId = process.env.USER_ID!;
-		console.log("Fetching applications for user:", userId);
-		return await getApplications(userId);
+	.use(requireUser)
+	.get("/", async ({ user }) => {
+		return await getApplications(user.id);
 	})
-	.guard({
-		beforeHandle: async ({ params: { appId }, status }) => {
-			const userId = process.env.USER_ID!;
-			const doesExist = await doesApplicationExist(appId, userId);
-			if (!doesExist) {
-				return status(404);
-			}
-		},
-		params: t.Object({
-			appId: t.String({ format: "uuid" }),
-		}),
-	})
-	.get("/:appId/details", async ({ params: { appId } }) => {
+	.use(requireProjectOwnership)
+	.get("/:appId/details", async ({ params: { appId }, user }) => {
 		const steps = await getApplicationStepsDefinitionsWithAnswers(appId);
 		const generatedPlans = await getApplicationPlansWithGenerations(appId);
 		return { steps, generatedPlans };
 	})
-	.use(planController)
 	.put(
 		"/:appId/answer",
 		async ({ params: { appId }, body }) => {
